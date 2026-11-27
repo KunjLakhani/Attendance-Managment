@@ -1,110 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attendance login test</title>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PW Attendance</title>
 <style>
-  :root { --bg:#f6f7f9; --card:#ffffff; --text:#1c2430; --muted:#5b6675; --line:#dde2e9; --accent:#1a5fb4; --ok:#1b7a3d; --bad:#b3261e; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#14181f; --card:#1d232d; --text:#e8ecf1; --muted:#9aa5b4; --line:#2e3744; --accent:#6aa5ff; --ok:#5fd08a; --bad:#ff8a80; }
-  }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.5; }
-  main { max-width:460px; margin:0 auto; padding:24px 16px; }
-  h1 { font-size:20px; margin:0 0 4px; }
-  p.sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:12px; }
-  .step { font-size:13px; color:var(--muted); margin:0 0 8px; }
-  button { font:inherit; font-size:15px; padding:12px 16px; width:100%; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--text); cursor:pointer; }
-  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
-  button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
-  .result { margin-top:10px; font-size:14px; word-break:break-word; }
-  .ok { color:var(--ok); } .bad { color:var(--bad); }
-  ul { padding-left:18px; margin:8px 0 0; font-size:14px; }
-</style>
-</head>
-<body>
-<main>
-  <h1>Attendance login test</h1>
-  <p class="sub">Checks that Google login and the private database work together.</p>
-
-  <div class="card">
-    <p class="step">Test 1: sign in</p>
-    <button class="primary" id="signin">Sign in with Google</button>
-    <div class="result" id="r1"></div>
-  </div>
-
-  <div class="card">
-    <p class="step">Test 2: save a record</p>
-    <button id="save">Save test attendance</button>
-    <div class="result" id="r2"></div>
-  </div>
-
-  <div class="card">
-    <p class="step">Test 3: read my records</p>
-    <button id="load">Show my records</button>
-    <div class="result" id="r3"></div>
-  </div>
-</main>
-
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap");
+:root{--bg:#f1f3f8;--cd:#fff;--tx:#0f172a;--mu:#64748b;--ln:#e2e8f0;--ac:#3730a3;--acf:#fff;--acl:#e0e7ff;--P:#15803d;--Pb:#dcfce7;--H:#b45309;--Hb:#fef3c7;--L:#be123c;--Lb:#ffe4e6;--W:#475569;--Wb:#e2e8f0}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--cd:#151b2e;--tx:#e8ecf5;--mu:#94a3b8;--ln:#273049;--ac:#a5b4fc;--acf:#10142a;--acl:#25295a;--P:#4ade80;--Pb:#12301f;--H:#fbbf24;--Hb:#3a2a0a;--L:#fb7185;--Lb:#3d1420;--W:#cbd5e1;--Wb:#2a3347}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--cd);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:5}
+.hd{max-width:1000px;margin:auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--ln)}
+.hd b{font-size:17px}.hd small{display:block;color:var(--mu);font-size:12px;line-height:1.2}.sp{flex:1}
+main{max-width:1000px;margin:auto;padding:16px}
+.card{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 12px}
+button,input,select,textarea{font:inherit;color:var(--tx)}
+button{cursor:pointer;border:1px solid var(--ln);background:var(--cd);border-radius:10px;padding:9px 14px}
+button.pri{background:var(--ac);color:var(--acf);border-color:var(--ac);font-weight:700}
+button.ok{background:var(--P);color:var(--cd);border-color:var(--P)}button.no{color:var(--L);border-color:var(--L)}
+button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--ln);border-radius:10px;background:var(--bg)}
+label{font-size:13px;color:var(--mu);display:block;margin:10px 0 4px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{padding:14px 4px;text-align:center;font-weight:700;border-width:2px}
+.tile.sel{border-color:var(--ac);background:var(--acl)}
+.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto}.tabs button{white-space:nowrap}.tabs .on{background:var(--ac);color:var(--acf);border-color:var(--ac)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.chip.P{background:var(--Pb);color:var(--P)}.chip.H{background:var(--Hb);color:var(--H)}.chip.L{background:var(--Lb);color:var(--L)}.chip.W{background:var(--Wb);color:var(--W)}
+.chip.Pending{outline:1.5px dashed currentColor;outline-offset:1px}.chip.Rejected{text-decoration:line-through}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:12px}
+.stat div{background:var(--bg);border-radius:10px;padding:10px;text-align:center}.stat b{font-size:22px;display:block}.stat span{font-size:12px;color:var(--mu)}
+.item{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--ln);flex-wrap:wrap}
+.mu{color:var(--mu);font-size:13px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--ln);text-align:center;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--cd)}
+td.c{font-weight:700;cursor:pointer;min-width:26px}td.P{background:var(--Pb);color:var(--P)}td.H{background:var(--Hb);color:var(--H)}td.L{background:var(--Lb);color:var(--L)}td.W{background:var(--Wb);color:var(--W)}td.Pending{outline:1.5px dashed currentColor;outline-offset:-3px}
+.login{text-align:center;padding:60px 16px}.login img{width:96px;height:96px;border-radius:50%;object-fit:cover}
+dialog{border:1px solid var(--ln);border-radius:14px;background:var(--cd);color:var(--tx);width:min(420px,92vw)}
+.msg{padding:10px 12px;border-radius:10px;background:var(--acl);margin-bottom:12px;font-size:14px}
+@media(max-width:520px){.hd small{display:none}}
+</style></head><body>
+<header><div class="hd"><img class="logo" src="logo.png" alt="PW"><div><b>PW Attendance</b><small>Team attendance and leave</small></div><div class="sp"></div><div id="who" class="mu"></div></div></header>
+<main id="app"><div class="card">Loading…</div></main>
+<dialog id="dlg"></dialog>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,query,where,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const ADMIN="gig.kunjlakhani98@gmail.com",A="attendance";
+const fb=initializeApp({apiKey:"AIzaSyDPqgcZCZpGtzzpmcnaLSRg3ow7qZIlsPg",authDomain:"team-attendance-4a21b.firebaseapp.com",projectId:"team-attendance-4a21b",storageBucket:"team-attendance-4a21b.firebasestorage.app",messagingSenderId:"638072926108",appId:"1:638072926108:web:746527314ff648b6bb2259"});
+const auth=getAuth(fb),db=getFirestore(fb);
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0"),iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x},TODAY=()=>iso(new Date());
+const nice=s=>new Date(s+"T00:00:00").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
+const ST={Present:"P",Halfday:"H",Leave:"L",Weekoff:"W"},LB={Present:"Present",Halfday:"Half-day",Leave:"Leave",Weekoff:"Week off"};
+const chip=r=>`<span class="chip ${ST[r.status]} ${r.approval}">${LB[r.status]}</span> <span class="mu">${r.approval}</span>`;
+const S={tab:"req",date:TODAY(),status:null,reason:null,month:TODAY().slice(0,7),recs:[],pend:[],today:[],users:[],mrecs:[],msg:""};
+let me=null;const app=$("#app");
+const go=async()=>{try{await load()}catch(e){S.msg="Error: "+e.code+" "+e.message}render()};
+const toast=m=>{S.msg=m;render()};
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDPqgcZCZpGtzzpmcnaLSRg3ow7qZIlsPg",
-  authDomain: "team-attendance-4a21b.firebaseapp.com",
-  projectId: "team-attendance-4a21b",
-  storageBucket: "team-attendance-4a21b.firebasestorage.app",
-  messagingSenderId: "638072926108",
-  appId: "1:638072926108:web:746527314ff648b6bb2259"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const $ = id => document.getElementById(id);
-const show = (id, msg, ok) => { $(id).className = "result " + (ok ? "ok" : "bad"); $(id).textContent = msg; };
-let user = null;
-
-onAuthStateChanged(auth, u => {
-  user = u;
-  if (u) show("r1", "Signed in as " + u.email, true);
+onAuthStateChanged(auth,async u=>{
+ me=null;
+ if(!u){$("#who").innerHTML="";return login()}
+ const email=u.email.toLowerCase();
+ if(email===ADMIN)me={email,name:u.displayName||"Manager",role:"manager"};
+ else{try{const d=await getDoc(doc(db,"users",email));if(d.exists()&&d.data().active!==false)me={...d.data(),email}}catch(e){}}
+ if(!me)return app.innerHTML=`<div class="card"><h2>Not registered</h2><p>${esc(email)} has not been added yet. Ask your manager to add this email, then sign in again.</p><button data-a="out">Sign out</button></div>`;
+ $("#who").innerHTML=`${esc(me.name)} <button data-a="out">Sign out</button>`;
+ S.tab="req";go();
 });
+function login(){app.innerHTML=`<div class="login"><img src="logo.png" alt="PW"><h2 style="margin-top:16px;font-size:22px">PW Attendance</h2><p class="mu">Sign in with your Gmail to mark attendance.</p><button class="pri" data-a="in">Sign in with Google</button></div>`}
 
-$("signin").onclick = async () => {
-  try {
-    const res = await signInWithPopup(auth, new GoogleAuthProvider());
-    show("r1", "Signed in as " + res.user.email, true);
-  } catch (e) {
-    show("r1", "Failed: " + e.code + " - " + e.message, false);
-  }
-};
+async function load(){
+ if(me.role!=="manager"){S.recs=(await getDocs(query(collection(db,A),where("email","==",me.email)))).docs.map(d=>d.data());return}
+ if(S.tab==="team"||S.tab==="rep"||!S.users.length)S.users=(await getDocs(collection(db,"users"))).docs.map(d=>d.data());
+ if(S.tab==="req"){
+  S.pend=(await getDocs(query(collection(db,A),where("approval","==","Pending")))).docs.map(d=>d.data()).sort((a,b)=>a.date.localeCompare(b.date));
+  S.today=(await getDocs(query(collection(db,A),where("date","==",TODAY())))).docs.map(d=>d.data())}
+ if(S.tab==="rep")S.mrecs=(await getDocs(query(collection(db,A),where("date",">=",S.month+"-01"),where("date","<=",S.month+"-31")))).docs.map(d=>d.data());
+}
+function render(){
+ if(!me)return;
+ const m=S.msg?`<div class="msg">${esc(S.msg)}</div>`:"";S.msg="";
+ app.innerHTML=m+(me.role==="manager"?mgr():mem());
+}
 
-$("save").onclick = async () => {
-  if (!user) return show("r2", "Sign in first (Test 1).", false);
-  try {
-    await addDoc(collection(db, "test"), { email: user.email, status: "Present", at: serverTimestamp() });
-    show("r2", "Saved to the private database.", true);
-  } catch (e) {
-    show("r2", "Failed: " + e.code + " - " + e.message, false);
-  }
-};
+/* member */
+function mem(){
+ const ex=S.recs.find(r=>r.date===S.date),lock=ex&&ex.approval!=="Pending",sel=S.status||(ex&&ex.status);
+ const mine=S.recs.filter(r=>r.date.startsWith(S.month)).sort((a,b)=>b.date.localeCompare(a.date));
+ const cnt=k=>mine.filter(r=>r.status===k&&r.approval==="Approved").length,pn=mine.filter(r=>r.approval==="Pending").length;
+ return`<div class="card"><h2>Mark attendance</h2>
+ <label>Date (yesterday to 30 days ahead)</label><input type="date" value="${S.date}" min="${iso(addD(new Date(),-1))}" max="${iso(addD(new Date(),30))}" data-c="date">
+ <label>Status</label><div class="tiles">${Object.keys(LB).map(k=>`<button class="tile ${sel===k?"sel":""}" data-a="pick" data-v="${k}" ${lock?"disabled":""}>${LB[k]}</button>`).join("")}</div>
+ <label>Reason (needed for leave and half-day)</label><textarea rows="2" data-c="reason" ${lock?"disabled":""}>${esc(S.reason??(ex?ex.reason:""))}</textarea>
+ ${ex?`<p class="mu">This date: ${chip(ex)}${lock?" Locked. Only your manager can change it.":""}</p>`:""}
+ <div class="row" style="margin-top:12px"><button class="pri" data-a="save" ${lock?"disabled":""}>${ex?"Update request":"Send request"}</button>${ex&&!lock?`<button class="no" data-a="withdraw">Withdraw</button>`:""}</div></div>
+ <div class="card"><div class="row"><h2 class="sp">My month</h2><input type="month" value="${S.month}" data-c="month" style="width:auto"></div>
+ <div class="stat"><div><b>${cnt("Present")}</b><span>Present</span></div><div><b>${cnt("Halfday")}</b><span>Half-day</span></div><div><b>${cnt("Leave")}</b><span>Leave</span></div><div><b>${cnt("Weekoff")}</b><span>Week off</span></div><div><b>${pn}</b><span>Pending</span></div></div>
+ ${mine.length?mine.map(r=>`<div class="item"><div><b>${nice(r.date)}</b> ${chip(r)}${r.reason?`<div class="mu">${esc(r.reason)}</div>`:""}</div>${r.approval==="Pending"?`<button data-a="edit" data-v="${r.date}">Edit</button>`:""}</div>`).join(""):`<p class="mu">No entries this month yet.</p>`}</div>`;
+}
 
-$("load").onclick = async () => {
-  if (!user) return show("r3", "Sign in first (Test 1).", false);
-  try {
-    const snap = await getDocs(query(collection(db, "test"), where("email", "==", user.email)));
-    if (snap.empty) return show("r3", "No records yet. Run Test 2 first.", false);
-    $("r3").className = "result ok";
-    $("r3").innerHTML = "Found " + snap.size + " record(s):<ul>" +
-      snap.docs.map(d => "<li>" + d.data().status + " by " + d.data().email + "</li>").join("") + "</ul>";
-  } catch (e) {
-    show("r3", "Failed: " + e.code + " - " + e.message, false);
-  }
+/* manager */
+const members=()=>S.users.filter(u=>u.role!=="manager"&&u.active!==false).sort((a,b)=>a.name.localeCompare(b.name));
+function mgr(){
+ return`<div class="tabs">${[["req","Requests"],["rep","Reports"],["team","Team"]].map(([k,l])=>`<button class="${S.tab===k?"on":""}" data-a="tab" data-v="${k}">${l}${k==="req"&&S.pend.length?` (${S.pend.length})`:""}</button>`).join("")}</div>`+(S.tab==="req"?reqV():S.tab==="rep"?repV():teamV());
+}
+function reqV(){
+ const ap=S.today.filter(r=>r.approval==="Approved"),c=k=>ap.filter(r=>r.status===k).length,seen=new Set(S.today.map(r=>r.email)),miss=members().filter(u=>!seen.has(u.email));
+ return`<div class="card"><h2>Today, ${nice(TODAY())}</h2><div class="stat"><div><b>${c("Present")}</b><span>Present</span></div><div><b>${c("Halfday")}</b><span>Half-day</span></div><div><b>${c("Leave")}</b><span>Leave</span></div><div><b>${c("Weekoff")}</b><span>Week off</span></div><div><b>${miss.length}</b><span>No request yet</span></div></div>
+ ${miss.length?`<p class="mu">No request yet: ${miss.map(u=>esc(u.name)).join(", ")}</p>`:""}
+ <button data-a="entry">Add or change an entry</button></div>
+ <div class="card"><div class="row"><h2 class="sp">Pending requests (${S.pend.length})</h2>${S.pend.length>1?`<button class="ok" data-a="allok">Approve all</button>`:""}</div>
+ ${S.pend.length?S.pend.map(r=>`<div class="item"><div><b>${esc(r.name)}</b>, ${nice(r.date)}<br>${chip(r)}${r.reason?`<div class="mu">${esc(r.reason)}</div>`:""}</div><div class="row"><button class="ok" data-a="dec" data-id="${esc(r.email+"_"+r.date)}" data-v="Approved">Approve</button><button class="no" data-a="dec" data-id="${esc(r.email+"_"+r.date)}" data-v="Rejected">Reject</button></div></div>`).join(""):`<p class="mu">Nothing waiting. All caught up.</p>`}</div>`;
+}
+function calc(){
+ const[y,mo]=S.month.split("-").map(Number),n=new Date(y,mo,0).getDate(),t=TODAY(),cut=S.month<t.slice(0,7)?n:S.month===t.slice(0,7)?+t.slice(8):0;
+ return{n,cut,rows:members().map(u=>{const c={Present:0,Halfday:0,Leave:0,Weekoff:0};let pend=0;
+  S.mrecs.filter(r=>r.email===u.email).forEach(r=>{if(r.approval==="Pending")pend++;else if(r.approval==="Approved"&&+r.date.slice(8)<=cut)c[r.status]++});
+  const mk=c.Present+c.Halfday+c.Leave+c.Weekoff,base=cut-c.Weekoff;
+  return{u,c,pend,un:Math.max(0,cut-mk),pct:base>0?Math.round((c.Present+c.Halfday/2)/base*1000)/10:null}})};
+}
+function repV(){
+ const{n,cut,rows}=calc(),days=[...Array(n)].map((_,i)=>i+1),map={};S.mrecs.forEach(r=>map[r.email+"|"+r.date]=r);
+ const tot=k=>rows.reduce((s,r)=>s+r.c[k],0),pc=rows.filter(r=>r.pct!=null),avg=pc.length?(Math.round(pc.reduce((s,r)=>s+r.pct,0)/pc.length*10)/10)+"%":"-";
+ return`<div class="card"><div class="row"><h2 class="sp">Reports</h2><input type="month" value="${S.month}" data-c="rmonth" style="width:auto"></div>
+ <div class="stat"><div><b>${rows.length}</b><span>Members</span></div><div><b>${tot("Present")}</b><span>Present days</span></div><div><b>${tot("Halfday")}</b><span>Half-days</span></div><div><b>${tot("Leave")}</b><span>Leave days</span></div><div><b>${avg}</b><span>Team attendance</span></div></div>
+ <p class="mu">Counts use approved entries up to ${cut?nice(S.month+"-"+pad(cut)):"the start of the month"}. Attendance % = (Present + half of Half-day) divided by days so far minus Week off.</p></div>
+ <div class="card"><div class="row"><h2 class="sp">Member-wise</h2><button data-a="csv1">Download CSV</button></div><div class="tw"><table><tr><th>Member</th><th>Present</th><th>Half-day</th><th>Leave</th><th>Week off</th><th>Pending</th><th>No entry</th><th>Attendance</th></tr>
+ ${rows.map(r=>`<tr><td>${esc(r.u.name)}</td><td>${r.c.Present}</td><td>${r.c.Halfday}</td><td>${r.c.Leave}</td><td>${r.c.Weekoff}</td><td>${r.pend}</td><td>${r.un}</td><td><b>${r.pct==null?"-":r.pct+"%"}</b></td></tr>`).join("")}</table></div></div>
+ <div class="card"><div class="row"><h2 class="sp">Team grid</h2><button data-a="csv2">Download CSV</button></div><p class="mu">P present, H half-day, L leave, W week off. Dashed means pending. Tap a cell to change it.</p><div class="tw"><table><tr><th>Member</th>${days.map(d=>`<th>${d}</th>`).join("")}</tr>
+ ${rows.map(r=>`<tr><td>${esc(r.u.name)}</td>${days.map(d=>{const k=S.month+"-"+pad(d),x=map[r.u.email+"|"+k];return x&&x.approval!=="Rejected"?`<td class="c ${ST[x.status]} ${x.approval}" data-a="entry" data-e="${esc(r.u.email)}" data-v="${k}">${ST[x.status]}</td>`:`<td class="c mu" data-a="entry" data-e="${esc(r.u.email)}" data-v="${k}">·</td>`}).join("")}</tr>`).join("")}
+ <tr><td><b>Present per day</b></td>${days.map(d=>{const k=S.month+"-"+pad(d);return`<td>${S.mrecs.filter(r=>r.date===k&&r.approval==="Approved"&&r.status==="Present").length||""}</td>`}).join("")}</tr></table></div></div>`;
+}
+function teamV(){
+ const ms=S.users.filter(u=>u.role!=="manager").sort((a,b)=>a.name.localeCompare(b.name));
+ return`<div class="card"><h2>Add a member</h2><label>Name</label><input id="nn"><label>Gmail address</label><input id="ne" type="email" placeholder="name@gmail.com"><label>Team (optional)</label><input id="nt">
+ <div style="margin-top:12px"><button class="pri" data-a="adduser">Add member</button></div></div>
+ <div class="card"><h2>Members (${ms.length})</h2>${ms.map(u=>`<div class="item"><div><b>${esc(u.name)}</b><div class="mu">${esc(u.email)}${u.team?", "+esc(u.team):""}</div></div><button data-a="tog" data-e="${esc(u.email)}">${u.active===false?"Reactivate":"Deactivate"}</button></div>`).join("")||`<p class="mu">No members yet.</p>`}</div>`;
+}
+
+/* actions */
+const dl=(name,rows)=>{const t=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click()};
+const decide=(id,v)=>updateDoc(doc(db,A,id),{approval:v,decidedBy:me.email,decidedAt:serverTimestamp()});
+function pickDate(v){S.date=v;const ex=S.recs.find(r=>r.date===v);S.status=ex&&ex.approval==="Pending"?ex.status:null;S.reason=null;render()}
+const act={
+ in:()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>alert("Sign-in failed: "+e.code)),
+ out:()=>signOut(auth),
+ tab:async d=>{S.tab=d.v;await go()},
+ pick:d=>{S.status=d.v;render()},
+ edit:d=>{pickDate(d.v);window.scrollTo(0,0)},
+ save:async()=>{const ex=S.recs.find(r=>r.date===S.date),status=S.status||(ex&&ex.status),reason=(S.reason??(ex?ex.reason:"")).trim();
+  if(S.date<iso(addD(new Date(),-1))||S.date>iso(addD(new Date(),30)))return toast("You can pick yesterday up to 30 days ahead. Ask your manager for older dates.");
+  if(!status)return toast("Choose a status first.");
+  if((status==="Leave"||status==="Halfday")&&!reason)return toast("Please add a reason.");
+  try{await setDoc(doc(db,A,me.email+"_"+S.date),{email:me.email,name:me.name,date:S.date,status,reason,approval:"Pending",updatedAt:serverTimestamp()});S.status=null;S.reason=null;await load();toast("Request sent for approval.")}catch(e){toast("Could not save: "+e.code)}},
+ withdraw:async()=>{if(!confirm("Withdraw this request?"))return;try{await deleteDoc(doc(db,A,me.email+"_"+S.date));S.status=null;S.reason=null;await load();toast("Request withdrawn.")}catch(e){toast("Could not withdraw: "+e.code)}},
+ dec:async d=>{try{await decide(d.id,d.v);await go()}catch(e){toast("Failed: "+e.code)}},
+ allok:async()=>{if(!confirm(`Approve all ${S.pend.length} pending requests?`))return;try{await Promise.all(S.pend.map(r=>decide(r.email+"_"+r.date,"Approved")));await go()}catch(e){toast("Failed: "+e.code)}},
+ entry:d=>{const e=d.e||"",dt=d.v||TODAY(),ex=[...S.mrecs,...S.today,...S.pend].find(r=>r.email===e&&r.date===dt);
+  $("#dlg").innerHTML=`<h2>Add or change entry</h2><label>Member</label><select id="em">${members().map(x=>`<option value="${esc(x.email)}" ${x.email===e?"selected":""}>${esc(x.name)}</option>`).join("")}</select>
+  <label>Date</label><input id="ed" type="date" value="${dt}"><label>Status</label><select id="es">${Object.keys(LB).map(k=>`<option value="${k}" ${ex&&ex.status===k?"selected":""}>${LB[k]}</option>`).join("")}</select>
+  <label>Note</label><input id="en" value="${esc(ex?ex.reason:"")}"><div class="row" style="margin-top:14px"><button class="pri" data-a="saveentry">Save as approved</button><button class="no" data-a="clearentry">Clear entry</button><button data-a="close">Cancel</button></div>`;$("#dlg").showModal()},
+ close:()=>$("#dlg").close(),
+ saveentry:async()=>{const e=$("#em").value,u=S.users.find(x=>x.email===e),date=$("#ed").value;if(!e||!date)return;
+  try{await setDoc(doc(db,A,e+"_"+date),{email:e,name:u.name,date,status:$("#es").value,reason:$("#en").value.trim(),approval:"Approved",decidedBy:me.email,decidedAt:serverTimestamp(),updatedAt:serverTimestamp()});$("#dlg").close();await go()}catch(x){alert("Failed: "+x.code)}},
+ clearentry:async()=>{const e=$("#em").value,date=$("#ed").value;if(!confirm("Delete this entry?"))return;try{await deleteDoc(doc(db,A,e+"_"+date));$("#dlg").close();await go()}catch(x){alert("Failed: "+x.code)}},
+ adduser:async()=>{const name=$("#nn").value.trim(),email=$("#ne").value.trim().toLowerCase();if(!name||!/^\S+@\S+\.\S+$/.test(email))return toast("Enter a name and a valid email.");
+  try{await setDoc(doc(db,"users",email),{name,email,team:$("#nt").value.trim(),role:"member",active:true});await go();toast(name+" added.")}catch(e){toast("Failed: "+e.code)}},
+ tog:async d=>{const u=S.users.find(x=>x.email===d.e);try{await updateDoc(doc(db,"users",d.e),{active:u.active===false});await go()}catch(e){toast("Failed: "+e.code)}},
+ csv1:()=>{const{rows}=calc();dl(`attendance-members-${S.month}.csv`,[["Member","Email","Present","Half-day","Leave","Week off","Pending","No entry","Attendance %"],...rows.map(r=>[r.u.name,r.u.email,r.c.Present,r.c.Halfday,r.c.Leave,r.c.Weekoff,r.pend,r.un,r.pct==null?"":r.pct])])},
+ csv2:()=>{const{rows,n}=calc(),map={};S.mrecs.forEach(r=>map[r.email+"|"+r.date]=r);dl(`attendance-grid-${S.month}.csv`,[["Member",...[...Array(n)].map((_,i)=>i+1)],...rows.map(r=>[r.u.name,...[...Array(n)].map((_,i)=>{const x=map[r.u.email+"|"+S.month+"-"+pad(i+1)];return x&&x.approval==="Approved"?ST[x.status]:x&&x.approval==="Pending"?ST[x.status]+"?":""})])])}
 };
-</script>
-</body>
-</html>
+const chg={date:v=>v&&pickDate(v),month:v=>{S.month=v;render()},rmonth:async v=>{if(v){S.month=v;await go()}}};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&act[b.dataset.a]&&!b.disabled)act[b.dataset.a](b.dataset)});
+document.addEventListener("input",e=>{if(e.target.dataset.c==="reason")S.reason=e.target.value});
+document.addEventListener("change",e=>{const c=e.target.dataset.c;if(c&&chg[c])chg[c](e.target.value)});
+</script></body></html>
